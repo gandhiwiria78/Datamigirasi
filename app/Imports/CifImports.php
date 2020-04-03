@@ -36,16 +36,47 @@ class CifImports implements ToCollection,WithHeadingRow
         $detail_error = array();
         foreach ($rows as $row)
         {
-
             try {
                 $kodecabang = $row['kodelokasi'];
             } catch (\Exception $e) {
                 $kodecabang = $row['kodecabang'];
             }
+            // if status 0 = ok, 1= salah
+
 
             try {
 
-                $tgllahir= $this->transformDateTime($row['perorangan_tgllahir']);
+                //checking 
+                $status=0;
+                $keterangan='';
+                if($row['jenisidentitas']!='KTP'){
+                    $status = 1 ;
+                    $keterangan.="Jenis Indentitas bukan KTP; ";
+                }
+                if($row['jenisnasabah']!='Perorangan'){
+                    $status = 1 ;
+                    $keterangan.="Jenis nasabah bukan perorangan; ";
+                }
+                if(strlen($row['perorangan_noktp'])!= 16){
+                    // dd(strlen($row['perorangan_noktp']));
+                    $status = 1 ;
+                    $keterangan.="No ktp tidak sama dengan 16; ";
+                }
+               
+                try {
+                    //checking tanggal lahir...
+                    if($this->transformDateTime($row['perorangan_tgllahir'])){
+                        $tgllahir=$this->transformDateTime($row['perorangan_tgllahir']);
+                        $keterangan.="";
+                    }
+                } catch (\Throwable $th) {
+                    //throw $th;
+                    $tgllahir=$row['perorangan_tgllahir'];
+                }
+               
+
+
+                
                 $data = [
                     //
                     'nocifalt'  => $row['nocifalt'],
@@ -66,9 +97,11 @@ class CifImports implements ToCollection,WithHeadingRow
                     'dataalamat_ktp_propinsi' => $row['dataalamat_ktp_propinsi'],
                     'dataalamat_rumah_notelp' => $row['dataalamat_rumah_notelp'],
                     //tglbukacif' => \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['tglbukacif']),
+                    'status' => $status,
+                    'keterangan'=>$keterangan
                 ];
             } catch (\Exception $e) {
-                array_push($data,$e);
+                dd($e);
                 array_push($data_error,$data);
             }
 

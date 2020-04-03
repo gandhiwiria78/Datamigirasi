@@ -73,7 +73,7 @@
                 </div>
 
                 <div class="links">
-                    <a href="{{ url('/import') }}">Import Data Migrasi</a>
+                    <a href="{{ url('/setupCU') }}">1.Setup Produk Intial</a>
                     <a href="{{ url('/home') }}">Import Data Migrasi</a>
                     <a href="{{ url('/home') }}">Import Data Migrasi</a>
                     <a href="{{ url('/home') }}">Import Data Migrasi</a>

@@ -22,5 +22,11 @@ class MyController extends Controller
         Excel::import($cif,request()->file('file'));
         return back();
     }
+
+    public function hapusCif()
+    {
+       return view('import');
+    }
+
 }
 

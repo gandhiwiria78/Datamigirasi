@@ -14,4 +14,8 @@
 Route::get('export', 'MyController@export')->name('export');
 Route::view('/', 'welcome');
 Route::view('/import', 'import');
+Route::view('/setupCU', 'setupCU');
+Route::view('/setupproduksimpan', 'setupProdukSimpanan');
+
 Route::post('importdm', 'MyController@import')->name('import');
+Route::get('hapusCIF','CifController@hapusCif')->name('hapusCIF');
